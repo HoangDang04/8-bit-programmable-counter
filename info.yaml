@@ -1,9 +1,9 @@
 # Tiny Tapeout project information
 project:
-  title:        ""      # Project title
-  author:       ""      # Your name
-  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  ""      # One line description of what your project does
+  title:        "8-bit programmable counter"      # Project title
+  author:       "Hoang Dang"      # Your name
+  discord:      "_skill.04_"      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
+  description:  "counter 8-bit duh"      # One line description of what your project does
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
 
@@ -23,34 +23,34 @@ project:
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: ""
-  ui[1]: ""
-  ui[2]: ""
-  ui[3]: ""
-  ui[4]: ""
-  ui[5]: ""
-  ui[6]: ""
-  ui[7]: ""
+  ui[0]: "u_in0"
+  ui[1]: "u_in1"
+  ui[2]: "u_in2"
+  ui[3]: "u_in3"
+  ui[4]: "u_in4"
+  ui[5]: "u_in5"
+  ui[6]: "u_in6"
+  ui[7]: "u_in7"
 
   # Outputs
-  uo[0]: ""
-  uo[1]: ""
-  uo[2]: ""
-  uo[3]: ""
-  uo[4]: ""
-  uo[5]: ""
-  uo[6]: ""
-  uo[7]: ""
+  uo[0]: "u_out0"
+  uo[1]: "u_out1"
+  uo[2]: "u_out2"
+  uo[3]: "u_out3"
+  uo[4]: "u_out4"
+  uo[5]: "u_out5"
+  uo[6]: "u_out6"
+  uo[7]: "u_out7"
 
   # Bidirectional pins
-  uio[0]: ""
-  uio[1]: ""
-  uio[2]: ""
-  uio[3]: ""
-  uio[4]: ""
-  uio[5]: ""
-  uio[6]: ""
-  uio[7]: ""
+  uio[0]: "u_io0"
+  uio[1]: "u_io1"
+  uio[2]: "u_io2"
+  uio[3]: "u_io3"
+  uio[4]: "u_io4"
+  uio[5]: "u_io5"
+  uio[6]: "u_io6"
+  uio[7]: "u_io7"
 
 # Do not change!
 yaml_version: 6
