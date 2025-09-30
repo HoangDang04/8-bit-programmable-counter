@@ -6,6 +6,13 @@ from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
 
 
+async def reset_dut(dut, cycles=5):
+    """Reset helper (active-low reset)."""
+    dut.rst_n.value = 0
+    await ClockCycles(dut.clk, cycles)
+    dut.rst_n.value = 1
+    await ClockCycles(dut.clk, 1)
+
 @cocotb.test()
 async def test_project(dut):
     dut._log.info("Start testbecnh of 8-bit programmable counter")
