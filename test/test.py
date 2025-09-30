@@ -8,33 +8,69 @@ from cocotb.triggers import ClockCycles
 
 @cocotb.test()
 async def test_project(dut):
-    dut._log.info("Start")
+    dut._log.info("Start testbecnh of 8-bit programmable counter")
 
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 10, units="us")
+    clock = Clock(dut.clk, 10, units="ns")
     cocotb.start_soon(clock.start())
 
-    # Reset
-    dut._log.info("Reset")
+    # Init signals
     dut.ena.value = 1
     dut.ui_in.value = 0
     dut.uio_in.value = 0
-    dut.rst_n.value = 0
-    await ClockCycles(dut.clk, 10)
-    dut.rst_n.value = 1
+    await reset_dut(dut)
+    
+    # TASK 1 : RUN NORMAL TEST FROM 0 TO 255
+    dut._log.info("TASK 1: Counting up 0 to 255")
+    dut.uio_in.value = 0b1010    # tri_state_en=1, enable=1, dir=0 (up), load=0
+    for i in range (255):
+        assert dut.uo_out.value.integer == i % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
+        await ClockCycles(dut.clk, 1)
+    
+    # TASK 2: RESET
+    dut._log.info("TASK 2: Resetting")
+    await reset_dut(dut)
 
-    dut._log.info("Test project behavior")
+    # TASK 3: LOAD 72 THEN GOES UP TO 96
+    dut._log.info("TASK 3: Load 72, then count up to 96")
+    dut.ui_in.value = 72
+    dut.uio_in.value = 0b0001    # tri_state_en=1, enable=1, dir=0 (up), load=0
+    
+    assert dut.uo_out.value.integer == 72 % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
+    await ClockCycles(dut.clk, 1)
+    
+    dut.uio_in.value = 0b1010    # enable = 1, up, tri_state = 1
+    for i in range(72, 97):
+        assert dut.uo_out.value.integer == i % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
+        await ClockCycles(dut.clk, 1)
 
-    # Set the input values you want to test
-    dut.ui_in.value = 20
-    dut.uio_in.value = 30
+    # TASK 4: CHANGE DIRECTION TO COUNT DOWN UNTIL 80
+    dut._log.info("TASK 4: Counting down until 80")
+    dut.uio_in.value = 0b1110    # Enable = 1, dir = 1, tri_state = 1
+    for i in range(97, 80, -1):
+        assert dut.uo_out.value.integer == i % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
+        await ClockCycles(dut.clk, 1)
 
-    # Wait for one clock cycle to see the output values
+    # TASK 5: TURN TRI-STATE OUTPUT TO Z
+    dut._log.info("TASK 5: Tri-state output to z")
+    dut.uio_in.value = 0b0110 # enable = 1, dir = 1, tri_state = 0
+    await ClockCycles(dut.clk, 5) # Output Z 5 clock cycles
+    assert dut.uo_out.vale.is_resolvable is False, "Output should be Z"
+
+    # TASK 6: LOAD 38 AND RUN UP TO 57
+    dut._log.info("TASK 6: Load 38, then count up to 57")
+    dut.ui_in.value = 38
+    dut.uio_in.value = 0b0001
+    
+    assert dut.uo_out.value.integer == 38 % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
     await ClockCycles(dut.clk, 1)
 
-    # The following assersion is just an example of how to check the output values.
-    # Change it to match the actual expected output of your module:
-    assert dut.uo_out.value == 50
+    dut.uio_in.value = 0b1010    # enable = 1, up, tri_state = 1
+    for i in range(38, 57):
+        assert dut.uo_out.value.integer == i % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
+        await ClockCycles(dut.clk, 1)
+
+    dut._log.info("Test completed")
 
     # Keep testing the module by changing the input values, waiting for
     # one or more clock cycles, and asserting the expected output values.
