@@ -67,6 +67,7 @@ async def test_project(dut):
     cocotb.log.info(dut.uo_out.value.integer)
     
     for i in range(97, 80, -1):
+        cocotb.log.info(dut.uo_out.value.integer)
         assert dut.uo_out.value.integer == i % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
         await ClockCycles(dut.clk, 1)
 
@@ -85,6 +86,7 @@ async def test_project(dut):
     await ClockCycles(dut.clk, 1)
     await ReadOnly()
     await ClockCycles(dut.clk, 1)
+    cocotb.log.info(dut.uo_out.value.integer)
     
     dut.uio_in.value = 0b1010    # tri_state_en = 1, enable = 1, dir = 0 (up), load = 0
     assert dut.uo_out.value.integer == 38 % 256, f"Expected {38} and got {dut.uo_out.value.integer}"
@@ -92,6 +94,7 @@ async def test_project(dut):
     await ClockCycles(dut.clk, 1)
     
     for i in range(39, 57):
+        cocotb.log.info(dut.uo_out.value.integer)
         assert dut.uo_out.value.integer == i % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
         await ClockCycles(dut.clk, 1)
 
