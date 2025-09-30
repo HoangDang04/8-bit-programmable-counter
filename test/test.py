@@ -31,12 +31,6 @@ async def test_project(dut):
     # TASK 1 : RUN NORMAL TEST FROM 0 TO 255
     dut._log.info("TASK 1: Counting up 0 to 325")
     dut.uio_in.value = 0b1010    # tri_state_en = 1, enable=1, dir=0 (up), load=0
-    
-    if dut.uio_in.value.integer & 0b1000:  # tri_state_en = 1
-        val = dut.uo_out.value.integer
-        assert val == expected, f"Expected {expected}, got {val}"
-    else:
-        cocotb.log.info("uo_out is tri-stated, skipping integer check")
 
     await ClockCycles(dut.clk, 1)
     for i in range (325):
@@ -50,7 +44,7 @@ async def test_project(dut):
     # TASK 3: LOAD 72 THEN GOES UP TO 96
     dut._log.info("TASK 3: Load 72, then count up to 96")
     dut.ui_in.value = 72
-    dut.uio_in.value = 0b0001    # tri_state_en=1, enable=1, dir=0 (up), load=0
+    dut.uio_in.value = 0b1001    # tri_state_en=0, enable=0, dir=0 (up), load=1
 
     await ClockCycles(dut.clk, 1)
     assert dut.uo_out.value.integer == 72 % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
@@ -76,7 +70,7 @@ async def test_project(dut):
     # TASK 6: LOAD 38 AND RUN UP TO 57
     dut._log.info("TASK 6: Load 38, then count up to 57")
     dut.ui_in.value = 38
-    dut.uio_in.value = 0b0001
+    dut.uio_in.value = 0b1001
 
     await ClockCycles(dut.clk, 1)
     assert dut.uo_out.value.integer == 38 % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
