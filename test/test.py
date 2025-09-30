@@ -24,13 +24,14 @@ async def test_project(dut):
     # Init signals
     dut.ena.value = 1
     dut.ui_in.value = 0
+    dut.uo_out.value = 0
     dut.uio_in.value = 0
     await reset_dut(dut)
     
     # TASK 1 : RUN NORMAL TEST FROM 0 TO 255
-    dut._log.info("TASK 1: Counting up 0 to 255")
-    dut.uio_in.value = 0b1010    # tri_state_en=1, enable=1, dir=0 (up), load=0
-    for i in range (255):
+    dut._log.info("TASK 1: Counting up 0 to 325")
+    dut.uio_in.value = 0b1010    # tri_state_en = 1, enable=1, dir=0 (up), load=0
+    for i in range (325):
         assert dut.uo_out.value.integer == i % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
         await ClockCycles(dut.clk, 1)
     
