@@ -61,12 +61,10 @@ async def test_project(dut):
     # TASK 4: CHANGE DIRECTION TO COUNT DOWN UNTIL 80
     dut._log.info("TASK 4: Counting down until 80")
     dut.uio_in.value = 0b1110    # Enable = 1, dir = 1, tri_state = 1
-    await cocotb.triggers.RisingEdge(dut.clk)   # now the always block sees dir=1
+    await cocotb.triggers.RisingEdge(dut.clk)   # now the always block sees dir = 1 before updates
     await ReadOnly()
-    cocotb.log.info(dut.uo_out.value.integer)
     
     for i in range(97, 80, -1):
-        cocotb.log.info(dut.uo_out.value.integer)
         assert dut.uo_out.value.integer == i % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
         await ClockCycles(dut.clk, 1)
 
@@ -81,7 +79,7 @@ async def test_project(dut):
     # TASK 6: LOAD 38 AND RUN UP TO 57
     dut._log.info("TASK 6: Load 38, then count up to 57")
     dut.ui_in.value = 38
-    dut.uio_in.value = 0b1001
+    dut.uio_in.value = 0b1001    # tri_state_en = 1, enable = 0, dir = 0 (up), load = 1
     await ClockCycles(dut.clk, 1)
     await ReadOnly()
     await ClockCycles(dut.clk, 1)
@@ -91,7 +89,7 @@ async def test_project(dut):
     await ReadOnly()
     await ClockCycles(dut.clk, 1)
     
-    for i in range(38, 57):
+    for i in range(39, 57):
         assert dut.uo_out.value.integer == i % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
         await ClockCycles(dut.clk, 1)
 
