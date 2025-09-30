@@ -41,7 +41,11 @@ module tt_um_example (
 	// If the tri_state_en is on then used the counter
 	assign uo_out = (tri_state_en) ? counter : 8'bz;
 
+	assign uio_out = 8'b0;
+	assign uio_oe  = 8'b0;
+
+
   // List all unused inputs to prevent warnings
-	wire _unused = &{ena, uio_out, uio_oe, 1'b0};
+	wire _unused = &{1'b0, uio_in[7:4]};
 
 endmodule
