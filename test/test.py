@@ -38,6 +38,7 @@ async def test_project(dut):
     else:
         cocotb.log.info("uo_out is tri-stated, skipping integer check")
 
+    await ClockCycles(dut.clk, 1)
     for i in range (325):
         assert dut.uo_out.value.integer == i % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
         await ClockCycles(dut.clk, 1)
