@@ -22,6 +22,7 @@ module tt_um_example (
     wire load = uio_in[0];
     wire enable = uio_in[1];
     wire dir = uio_in[2];
+	wire tri_state_en = uio_in[3];
 
 	// Counter logic
 	always @(posedge clk or negedge rst_n) begin
@@ -37,10 +38,10 @@ module tt_um_example (
 		end
 	end
 
-	assign uo_out = counter;
-	assign uio_oe = {8{enable}};
+	// If the tri_state_en is on then used the counter
+	assign uo_out = (tri_state_en) ? counter : 8'bz;
 
   // List all unused inputs to prevent warnings
-	wire _unused = &{ena, 1'b0};
+	wire _unused = &{ena, uio_out, uio_oe, 1'b0};
 
 endmodule
