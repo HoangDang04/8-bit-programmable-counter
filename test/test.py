@@ -4,7 +4,7 @@
 import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
-
+from cocotb.triggers import Reads only
 
 async def reset_dut(dut, cycles=5):
     """Reset helper (active-low reset)."""
