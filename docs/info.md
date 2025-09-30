@@ -40,4 +40,13 @@ Unused IO signals (`uio_out`, `uio_oe`) are tied off.
    - Ensure `uio_in[3] = 1` so outputs are visible.  
    - The counter will increment or decrement on each rising clock edge.  
 
-4. **Tri-state the output**
+4. **Tri-state the output**  
+   - Set `uio_in[3] = 0`.  
+   - `uo_out` will go high impedance (`Z`) while the counter continues running internally.  
+
+
+---
+
+## External hardware
+
+This design does not require any external hardware.  
