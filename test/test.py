@@ -40,7 +40,6 @@ async def test_project(dut):
     # TASK 2: RESET
     dut._log.info("TASK 2: Resetting")
     await reset_dut(dut)
-    await ClockCycles(dut.clk, 1)
 
     # TASK 3: LOAD 72 THEN GOES UP TO 96
     dut._log.info("TASK 3: Load 71, then count up to 96")
@@ -48,8 +47,11 @@ async def test_project(dut):
     dut.uio_in.value = 0b1001    # tri_state_en = 1, enable = 0, dir = 0 (up), load = 1
     
     await ClockCycles(dut.clk, 1)
+    await ReadOnly()
     cocotb.log.info(dut.uo_out.value.integer)
     dut.uio_in.value = 0b1000    # tri_state_en = 1, enable = 0, dir = 0 (up), load = 0
+    
+    cocotb.log.info(dut.uo_out.value.integer)
     assert dut.uo_out.value.integer == 71 % 256, f"Expected {71} and got {dut.uo_out.value.integer}"
     
     dut.uio_in.value = 0b1010    # enable = 1, up, tri_state = 1
