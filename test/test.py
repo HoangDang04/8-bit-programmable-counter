@@ -63,10 +63,10 @@ async def test_project(dut):
     dut.uio_in.value = 0b1110    # Enable = 1, dir = 1, tri_state = 1
     cocotb.log.info(dut.uo_out.value.integer)
     await ReadOnly()
-    #await ClockCycles(dut.clk, 1)
+    await ClockCycles(dut.clk, 1)
     cocotb.log.info(dut.uo_out.value.integer)
     
-    for i in range(97, 80, -1):
+    for i in range(98, 80, -1):
         cocotb.log.info(dut.uo_out.value.integer)
         assert dut.uo_out.value.integer == i % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
         await ClockCycles(dut.clk, 1)
