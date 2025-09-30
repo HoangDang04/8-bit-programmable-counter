@@ -40,12 +40,13 @@ async def test_project(dut):
     # TASK 2: RESET
     dut._log.info("TASK 2: Resetting")
     await reset_dut(dut)
+    await ClockCycles(dut.clk, 1)
 
     # TASK 3: LOAD 72 THEN GOES UP TO 96
     dut._log.info("TASK 3: Load 71, then count up to 96")
     dut.ui_in.value = 71
     dut.uio_in.value = 0b1001    # tri_state_en = 1, enable = 0, dir = 0 (up), load = 1
-    cocotb.log.info(dut.uo_out.value.integer)
+    
     await ClockCycles(dut.clk, 1)
     cocotb.log.info(dut.uo_out.value.integer)
     dut.uio_in.value = 0b1000    # tri_state_en = 1, enable = 0, dir = 0 (up), load = 0
