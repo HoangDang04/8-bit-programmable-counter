@@ -28,7 +28,7 @@ async def test_project(dut):
     dut.uio_in.value = 0
     await reset_dut(dut)
     
-    # TASK 1 : RUN NORMAL TEST FROM 0 TO 255
+    # TASK 1 : RUN NORMAL TEST FROM 0 TO 325
     dut._log.info("TASK 1: Counting up 0 to 325")
     dut.uio_in.value = 0b1010    # tri_state_en = 1, enable = 1, dir = 0 (up), load  =0
 
@@ -41,8 +41,8 @@ async def test_project(dut):
     dut._log.info("TASK 2: Resetting")
     await reset_dut(dut)
 
-    # TASK 3: LOAD 72 THEN GOES UP TO 96
-    dut._log.info("TASK 3: Load 71, then count up to 96")
+    # TASK 3: LOAD 72 THEN GOES UP TO 97
+    dut._log.info("TASK 3: Load 71, then count up to 97")
     dut.ui_in.value = 71
     dut.uio_in.value = 0b1001    # tri_state_en = 1, enable = 0, dir = 0 (up), load = 1
     await ClockCycles(dut.clk, 1)
@@ -63,7 +63,7 @@ async def test_project(dut):
     dut._log.info("TASK 4: Counting down until 80")
     dut.uio_in.value = 0b1110    # Enable = 1, dir = 1, tri_state = 1
     await ReadOnly()
-    await ClockCycles(dut.clk, 1)
+    # await ClockCycles(dut.clk, 1)
     for i in range(97, 80, -1):
         assert dut.uo_out.value.integer == i % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
         await ClockCycles(dut.clk, 1)
