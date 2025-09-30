@@ -21,7 +21,7 @@ module tt_um_example (
 	// There are 3 main signals: load to load the counter, enable to keep counting and dir to check if it is going up or down
     wire load = uio_in[0];
     wire enable = uio_in[1];
-    wire dir = uio_in[2];
+    wire direction = uio_in[2];
 	wire tri_state_en = uio_in[3];
 
 	// Counter logic
