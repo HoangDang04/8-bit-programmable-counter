@@ -61,9 +61,8 @@ async def test_project(dut):
     # TASK 4: CHANGE DIRECTION TO COUNT DOWN UNTIL 80
     dut._log.info("TASK 4: Counting down until 80")
     dut.uio_in.value = 0b1110    # Enable = 1, dir = 1, tri_state = 1
-    cocotb.log.info(dut.uo_out.value.integer)
+    await cocotb.triggers.RisingEdge(dut.clk)   # now the always block sees dir=1
     await ReadOnly()
-    await ClockCycles(dut.clk, 1)
     cocotb.log.info(dut.uo_out.value.integer)
     
     for i in range(98, 80, -1):
@@ -74,8 +73,10 @@ async def test_project(dut):
     # TASK 5: TURN TRI-STATE OUTPUT TO Z
     dut._log.info("TASK 5: Tri-state output to z")
     dut.uio_in.value = 0b0110 # enable = 1, dir = 1, tri_state = 0
+    await ReadOnly()
+    
     await ClockCycles(dut.clk, 5) # Output Z 5 clock cycles
-    assert dut.uo_out.vale.is_resolvable is False, "Output should be Z"
+    assert dut.uo_out.value.is_resolvable is False, "Output should be Z"
 
     # TASK 6: LOAD 38 AND RUN UP TO 57
     dut._log.info("TASK 6: Load 38, then count up to 57")
