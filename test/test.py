@@ -51,9 +51,9 @@ async def test_project(dut):
     dut._log.info("TASK 3: Load 72, then count up to 96")
     dut.ui_in.value = 72
     dut.uio_in.value = 0b0001    # tri_state_en=1, enable=1, dir=0 (up), load=0
-    
-    assert dut.uo_out.value.integer == 72 % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
+
     await ClockCycles(dut.clk, 1)
+    assert dut.uo_out.value.integer == 72 % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
     
     dut.uio_in.value = 0b1010    # enable = 1, up, tri_state = 1
     for i in range(72, 97):
@@ -77,9 +77,9 @@ async def test_project(dut):
     dut._log.info("TASK 6: Load 38, then count up to 57")
     dut.ui_in.value = 38
     dut.uio_in.value = 0b0001
-    
-    assert dut.uo_out.value.integer == 38 % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
+
     await ClockCycles(dut.clk, 1)
+    assert dut.uo_out.value.integer == 38 % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
 
     dut.uio_in.value = 0b1010    # enable = 1, up, tri_state = 1
     for i in range(38, 57):
