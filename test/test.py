@@ -34,6 +34,8 @@ async def pre_test(dut):
         assert dut.uo_out.value.integer == i % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
         await ClockCycles(dut.clk, 1)
     dut._log.info("Trial test completed")
+
+@cocotb.test()
 async def main_test(dut):
     dut._log.info("Start testbecnh of 8-bit programmable counter")
 
