@@ -14,7 +14,27 @@ async def reset_dut(dut, cycles=5):
     await ClockCycles(dut.clk, 1)
 
 @cocotb.test()
-async def test_project(dut):
+async def pre_test(dut):
+    dut._log.info("Start trial test")
+
+    clock = Clock(dut.clk, 10, units="ns")
+    cocotb.start_soon(clock.start())
+
+    dut.ena.value = 1
+    dut.ui_in.value = 0
+    dut.uo_out.value = 0
+    dut.uio_in.value = 0
+    await reset_dut(dut)
+
+    dut._log.info("Run from 0 to 999")
+    dut.uio_in.value = 0b1010    # tri_state_en = 1, enable = 1, dir = 0 (up), load  =0
+
+    await ClockCycles(dut.clk, 1)
+    for i in range (999):
+        assert dut.uo_out.value.integer == i % 256, f"Expected {i} and got {dut.uo_out.value.integer}"
+        await ClockCycles(dut.clk, 1)
+    dut._log.info("Trial test completed")
+async def main_test(dut):
     dut._log.info("Start testbecnh of 8-bit programmable counter")
 
     # Set the clock period to 10 us (100 KHz)
